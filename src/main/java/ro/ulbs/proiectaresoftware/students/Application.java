@@ -1,55 +1,54 @@
 package ro.ulbs.proiectaresoftware.students;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Application {
-
     public static void main(String[] args) {
-        Student s1 = new Student(112, "Ioan", "Popa", "TI21/1");
-        Student s2 = new Student(112, "Maria", "Oprea", "TI21/1");
-        Student s3 = new Student(120, "Alis", "Popa", "TI21/2");
-        Student s4 = new Student(122, "Mihai", "Vecerdea", "TI22/1");
-        Student s5 = new Student(122, "Eugen", "Uritescu", "TI22/2");
 
+        Map<Integer, Student> mapStudenti = new HashMap<>();
 
-        Set<Student> listaStudenti = new HashSet<>();
-        listaStudenti.add(s1);
-        listaStudenti.add(s2);
-        listaStudenti.add(s3);
-        listaStudenti.add(s4);
-        listaStudenti.add(s5);
+        try {
 
-        System.out.println(String.format("%-15s %-15s %-15s %-15s",
-                "numar matricol", "prenume", "nume", "formatieDeStudiu"));
-        System.out.println("------------------------------------------------------------");
-
-        for (Student s : listaStudenti) {
-            System.out.println(s);
-        }
-
-        System.out.println("------------------------------------------------------------");
-
-
-        Student cautatB = new Student(120, "Alis", "Popa", "TI21/2");
-        System.out.println("b) Este Alis Popa in lista? " + listaStudenti.contains (cautatB));
-
-
-        Student cautatC = new Student(112, "Maria", "Popa", "TI21/1");
-        System.out.println("c) Este Maria Popa in lista? " + listaStudenti.contains(cautatC));
-
-    }
-
-
-    public static boolean existaStudent(Set<Student> lista, Student studentCautat) {
-        for (Student s : lista) {
-            if (s.getPrenume().equals(studentCautat.getPrenume()) &&
-                    s.getNume().equals(studentCautat.getNume()) &&
-                    s.getFormatieDeStudiu().equals(studentCautat.getFormatieDeStudiu())) {
-                return true;
+            List<String> liniiS = Files.readAllLines(Paths.get("studenti_in.txt"));
+            for (String linie : liniiS) {
+                if (linie.trim().isEmpty()) continue;
+                String[] d = linie.split(",");
+                if (d.length == 4) {
+                    int id = Integer.parseInt(d[0].trim());
+                    Student s = new Student(id, d[1].trim(), d[2].trim(), d[3].trim());
+                    mapStudenti.put(id, s);
+                }
             }
+
+
+            List<String> liniiN = Files.readAllLines(Paths.get("note_anon.txt"));
+            for (String linie : liniiN) {
+                if (linie.trim().isEmpty()) continue;
+                String[] d = linie.split(",");
+                if (d.length == 2) {
+                    int id = Integer.parseInt(d[0].trim());
+                    float notaVal = Float.parseFloat(d[1].trim());
+
+
+                    if (mapStudenti.containsKey(id)) {
+                        mapStudenti.get(id).setNota(notaVal);
+                    }
+                }
+            }
+
+
+            System.out.println(String.format("%-15s %-15s %-15s %-15s %-10s",
+                    "Matricol", "Prenume", "Nume", "Grup", "Nota"));
+            System.out.println("-------------");
+            for (Student s : mapStudenti.values()) {
+                System.out.println(s);
+            }
+
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Eroare la procesare: " + e.getMessage());
         }
-        return false;
     }
 }
