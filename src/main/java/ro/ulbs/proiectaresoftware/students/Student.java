@@ -54,6 +54,10 @@ public class Student {
         return String.format("%-15d %-15s %-15s %-15s %-10.2f",
                 numarMatricol, prenume, nume, formatieDeStudiu, nota);
     }
+    public String getFormatieDeStudiu() {
+        return formatieDeStudiu;
+    }
+
 }
 
 
