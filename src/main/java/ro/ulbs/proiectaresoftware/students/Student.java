@@ -17,10 +17,24 @@ public class Student {
         this.nota = 0.0f;
     }
 
-    public int getNumarMatricol() { return numarMatricol; }
+    public String getPrenume() {
+        return prenume;
+    }
+    public String getNume() {
+        return nume;
+    }
+    public float getNota() {
+        return nota;
+    }
+
+    public int getNumarMatricol() {
+        return numarMatricol;
+    }
 
 
-    public void setNota(float nota) { this.nota = nota; }
+    public void setNota(float nota) {
+        this.nota = nota;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -41,3 +55,5 @@ public class Student {
                 numarMatricol, prenume, nume, formatieDeStudiu, nota);
     }
 }
+
+
